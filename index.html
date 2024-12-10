@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Determine Location</title>
+</head>
+<body>
+    <h1>Determine Your Location</h1>
+    <button onclick="getGeolocation()">Get Geolocation (Browser API)</button>
+    <p id="geolocation-result"></p>
+
+    <button onclick="getIPLocation()">Get Location (IP-based)</button>
+    <p id="iplocation-result"></p>
+
+    <script>
+        // 1. HTML5 Geolocation API
+        function getGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        document.getElementById("geolocation-result").innerText = 
+                            `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    },
+                    (error) => {
+                        document.getElementById("geolocation-result").innerText = 
+                            `Error: ${error.message}`;
+                    }
+                );
+            } else {
+                document.getElementById("geolocation-result").innerText = 
+                    "Geolocation is not supported by this browser.";
+            }
+        }
+
+        // 2. IP-based Geolocation
+        async function getIPLocation() {
+            try {
+                const response = await fetch("https://ipinfo.io/json?token=YOUR_API_KEY");
+                const data = await response.json();
+                document.getElementById("iplocation-result").innerText = 
+                    `IP Location: ${data.city}, ${data.region}, ${data.country}. Coordinates: ${data.loc}`;
+            } catch (error) {
+                document.getElementById("iplocation-result").innerText = 
+                    `Error fetching IP location: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
